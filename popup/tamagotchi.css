@@ -1,9 +1,88 @@
-html,
-body {
-    /* width: 100px; */
-    background-color: rgb(14, 21, 40);
+/* :root {
+    --bg: rgb(14, 21, 40);
+} */
+
+* {
+    color: white;
 }
 
-p {
+html,
+body {
+    margin: 0;
+    width: 250px;
+    height: 250px;
+    background-color: rgb(14, 21, 40);
+    /* color: white; */
+    font-family: sans-serif;
+}
+
+/* body {
+    margin: none;
+    border-radius: none;
+} */
+
+/* p {
     color: white;
+} */
+
+button {
+    /* border: none; */
+    background-color: transparent;
+    /* color: white; */
+}
+
+button:hover {
+    background-color: #ffffff44;
+}
+
+button:active {
+    background-color: transparent;
+}
+
+#info {
+    text-align: center;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 20px);
+    padding: 10px;
+    gap: 10px;
+    /* align-content: space-between; */
+}
+
+#tamagotchi {
+    display: inline;
+    flex: 1;
+    margin: 0;
+}
+
+#tamagotchi > button {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.hungry {
+    background-color: #ff000044;
+}
+
+/* #tamagotchi > button:hover {
+    background-color: #ffffff44;
+} */
+
+#controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+}
+
+#controls > button {
+    /* flex-grow: 1; */
+    height: 40px;
+    width: 40px;
+    border: 1px solid white;
+    border-radius: 5px;
 }

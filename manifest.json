@@ -21,7 +21,7 @@
     },
 
     "action": {
-        "default_icon": "bun32.png",
+        "default_icon": "kaguya32.png",
         "default_title": "Tamagotchi",
         "default_popup": "popup/tamagotchi.html"
     },
