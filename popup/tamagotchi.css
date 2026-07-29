@@ -43,6 +43,10 @@ button:active {
     text-align: center;
 }
 
+#name {
+    margin: 0;
+}
+
 #container {
     display: flex;
     flex-direction: column;
@@ -66,6 +70,10 @@ button:active {
 
 .hungry {
     background-color: #ff000044;
+}
+
+.sad {
+    background-color: #0000ff44;
 }
 
 /* #tamagotchi > button:hover {
