@@ -9,8 +9,8 @@
 html,
 body {
     margin: 0;
-    width: 250px;
     height: 250px;
+    width: 250px;
     background-color: rgb(14, 21, 40);
     /* color: white; */
     font-family: sans-serif;
@@ -63,8 +63,8 @@ button:active {
 }
 
 #tamagotchi > button {
-    width: 100%;
     height: 100%;
+    width: 100%;
     border: none;
 }
 
