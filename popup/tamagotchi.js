@@ -1,23 +1,72 @@
 let tamagotchi = document.getElementById("tamagotchi");
 
-let tama = document.getElementById("tama");
-let ctx = tama.getContext("2d");
+let canvas = document.getElementById("tama");
+let ctx = canvas.getContext("2d");
 // ctx.imageSmoothingEnabled = false;
 const img = new Image();
 
-tamagotchi.classList.add("hungry");
-// maybe use the button for click event instead of the div...
-tamagotchi.addEventListener("click", e => {
-    tamagotchi.classList.remove("hungry");
-});
+let button = document.getElementById("tama-b");
+
+// tamagotchi.classList.add("hungry");
+// // maybe use the button for click event instead of the div...
+// button.addEventListener("click", e => {
+//     tamagotchi.classList.remove("hungry");
+// });
 
 let hatch = document.getElementById("hatch");
 
 let start = document.getElementById("start");
 let main = document.getElementById("main");
+let info = document.getElementById("name");
+
+function hungerCycle() {
+    let hunger = browser.storage.sync.get("hunger");
+    hunger.then(i => {
+        if (i.hunger > 0) {
+            browser.storage.sync.set({hunger: i.hunger - 1});
+            console.log(i.hunger - 1);
+        }
+        setTimeout(() => {
+            hungerCycle();
+        }, 1000);
+    });
+}
+
+function happyCycle() {
+    let happy = browser.storage.sync.get("happy");
+    happy.then(i => {
+        if (i.happy > 0) {
+            browser.storage.sync.set({happy: i.happy - 1});
+            console.log(i.happy - 1);
+        }
+        setTimeout(() => {
+            happyCycle();
+        }, 1000);
+    });
+}
+
+function feed() {
+
+}
+
+function play() {
+
+}
 
 hatch.addEventListener("click", e => {
-    ctx.clearRect(0, 0, tama.height, tama.width);
+    let hatched = Date.now();
+    browser.storage.sync.set({hatchDate: hatched, hunger: 4, happy: 4/*, lastFed: hatched, lastPlayed: hatched*/, state: "baby"});
+    let test = browser.storage.sync.get();
+    test.then(i => {
+        console.log(i);
+    });
+    setTimeout(hungerCycle, 1000);
+    setTimeout(happyCycle, 1000);
+    // info.innerText = browser.storage.sync.get("hatchDate", i => {return i.toString();});
+
+    tamagotchi.classList.add("baby");
+
+    ctx.clearRect(0, 0, canvas.height, canvas.width);
     x = 0, y = 0;
     img.src = "../kaguya128.png";
     // ctx.drawImage(img, 0, 0);
