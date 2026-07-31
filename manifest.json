@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Tamagotchi",
-    "version": "1.0",
+    "version": "0.1",
 
     "description": "Tamagotchi pet browser extension",
     "homepage_url": "https://github.com/riceballeater/tamagotchi-extension",

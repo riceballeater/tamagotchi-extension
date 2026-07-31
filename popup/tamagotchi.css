@@ -68,16 +68,16 @@ button:active {
     border: none;
 }
 
-/* .hungry {
-    background-color: #ff000044;
-}
-
-.sad {
-    background-color: #0000ff44;
-} */
-
 .baby {
     background-color: #88888888;
+}
+
+.baby.sad, .sad {
+    background-color: #0000ff44;
+}
+
+.baby.hungry, .hungry {
+    background-color: #ff000044;
 }
 
 /* #tamagotchi > button:hover {
@@ -120,9 +120,11 @@ button:active {
 }
 
 #hatch-time {
-    font-size: 30px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 1em;
 }
 
-#main > button {
+#main > button, #action > button {
     width: 30px;
 }

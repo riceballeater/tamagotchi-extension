@@ -10,7 +10,7 @@
     <body>
         <div id="container">
             <div id="info">
-                <p id="name">kaguya</p>
+                <p id="name">kaguya</p><p id="hunger"></p><p id="happy"></p>
             </div>
             <div id="tamagotchi">
                 <button type="button" id="tama-b">
@@ -21,7 +21,7 @@
             <div id="controls">
                 <div id="start">
                     <button type="button" id="hatch">hatch</button>
-                    <p id="hatch-time" style="display: none;">put time here</p>
+                    <span id="hatch-time" style="display: none;">put time here</p>
                 </div>
                 <div id="main" style = "display: none;">
                     <button type="button" id="act">a</button>
@@ -29,12 +29,12 @@
                     <button type="button" id="set">c</button>
                     <!-- <button type="button" id="check">c</button> -->
                 </div>
-                <div id="acting" style="display: none;">
+                <div id="action" style="display: none;">
                     <button type="button" id="feed">f</button>
                     <button type="button" id="give">g</button>
-                    <button type="button" id="return-a"></button>
+                    <button type="button" id="a-return">r</button>
                 </div>
-                <div id="action" style="display: none;">
+                <div id="game" style="display: none;">
                     
                 </div>
                 <div id="settings" style="display: none;">
@@ -42,6 +42,7 @@
                 </div>
             </div>
         </div>
+        <div id="overlay"></div>
         <script src="tamagotchi.js"></script>
     </body>
 </html>
