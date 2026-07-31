@@ -36,7 +36,7 @@ let giveButton = document.getElementById("give");
 let games = document.getElementById("games");
 
 let settings = document.getElementById("settings");
-let something = "a";
+let clearButton = document.getElementById("clear");
 
 // testing
 let aaa = document.getElementById("hunger");
@@ -44,11 +44,18 @@ let bbb = document.getElementById("happy");
 
 let hungerId, happyId;
 
+const hatchTime = 3000;
+const growthTime = 10000;
+const hungerTimeout = 5000;
+const hungerTimeoutBaby = 3000;
+const happyTimeout = 5000;
+const happyTimeoutBaby = 3000;
+
 function clear() { // which one do i use...
     let clearing = browser.storage.local.clear();
     clearing.then(() => console.log("ok"), e => console.log(error));
-    let clearing2 = browser.storage.sync.clear();
-    clearing2.then(() => console.log("ok"), e => console.log(error));
+    // let clearing2 = browser.storage.sync.clear();
+    // clearing2.then(() => console.log("ok"), e => console.log(error));
 
     clearTimeout(hungerId);
     clearTimeout(happyId);
@@ -61,14 +68,14 @@ function hungerCycle() {
     let data = browser.storage.local.get(["hunger", "hungerTick", "state"]);
     
     let now = Date.now(); // should this be after everything?
-    let timeout = 2000;
+    let timeout = hungerTimeout;
 
     data.then(i => {
-        // if (!i.hungerTick) {
-        //     return;
-        // }
+        if (!i.hungerTick) {
+            return;
+        }
         if (i.state == "baby") {
-            timeout = 1000;
+            timeout = hungerTimeoutBaby;
         }
         let expectedTick = i.hungerTick + timeout;
         let deltaTime = now - expectedTick;
@@ -81,13 +88,13 @@ function hungerCycle() {
 
         if (i.hunger > 0) {
             browser.storage.local.set({hunger: i.hunger - 1});
-            tamagotchi.classList.remove("hungry");
+            // tamagotchi.classList.remove("hungry");
             console.log(`hunger ${i.hunger - 1}`);
             aaa.innerText = `hunger ${i.hunger - 1} `;
         }
         
         if (i.hunger - 1 < 1) {
-            tamagotchi.classList.add("hungry");
+            // tamagotchi.classList.add("hungry");
         }
         
         console.log(`hunger tick ${expectedTick}`);
@@ -109,14 +116,14 @@ function happyCycle() {
     let data = browser.storage.local.get(["happy", "happyTick", "state"]);
 
     let now = Date.now();
-    let timeout = 2000;
+    let timeout = happyTimeout;
 
     data.then(i => {
-        // if (!i.happyTick) {
-        //     return;
-        // }
+        if (!i.happyTick) {
+            return;
+        }
         if (i.state == "baby") {
-            timeout = 1000;
+            timeout = happyTimeoutBaby;
         }
 
         let expectedTick = i.happyTick + timeout;
@@ -134,7 +141,7 @@ function happyCycle() {
         }
         
         if (i.happy - 1 < 1) {
-            tamagotchi.classList.add("sad");
+            // tamagotchi.classList.add("sad");
         }
 
         console.log(`happy tick ${expectedTick}`);
@@ -149,6 +156,14 @@ function happyCycle() {
             happyCycle();
         }, timeout - deltaTime);
     });
+}
+
+function pause() {
+
+}
+
+function sleepCycle() {
+    
 }
 
 function growth() {
@@ -182,22 +197,7 @@ function growth() {
 //     funLoop = setTimeout(happyCycle, timeout);
 // }
 
-function load() {
-    let test = browser.storage.local.get();
-    test.then(i => {
-        if (Date.now() - i.hatchDate > 10000) {
-            growth();
-        } else {
-            tamagotchi.classList.add("baby");
-        }
-        
-        console.log(i);
-    });
-    
-    info.innerText = "";
-    aaa.innerText = "hunger 0 ";
-    bbb.innerText = "happy 0";
-
+function drawStart() {
     ctx.clearRect(0, 0, canvas.height, canvas.width);
     x = 0, y = 0;
     img.src = "../kaguya128.png";
@@ -206,6 +206,67 @@ function load() {
     start.style.display = "none";
     // hatchText.style.display = "none";
     main.style.display = "";
+}
+
+function load() {
+    let test = browser.storage.local.get();
+    test.then(i => {
+        let dtGrowth = Date.now() - i.hatchDate;
+        if (i.state == "baby") {
+            if (dtGrowth > growthTime) {
+                growth();
+            } else {
+                setTimeout(() => {
+                    growth();
+                }, growthTime - dtGrowth);
+                tamagotchi.classList.add("baby");
+            }
+        }
+
+        let dtHunger = Date.now() - i.hungerTick;
+        // console.log(dtHunger);
+        let currentTimeout = i.state == "baby" ? hungerTimeoutBaby : hungerTimeout;
+        // console.log(currentTimeout);
+        if (dtHunger > currentTimeout) {
+            let ticks = Math.floor(dtHunger / currentTimeout);
+            // console.log(ticks);
+            let newHunger = i.hunger - ticks;
+            // console.log(newHunger);
+            browser.storage.local.set({hunger: newHunger > 0 ? newHunger : 0});
+            browser.storage.local.set({hungerTick: i.hungerTick + ticks * currentTimeout});
+            // console.log(i.hungerTick + ticks * currentTimeout);
+        }
+        if (hungerId) {
+            clearTimeout(hungerId);
+            hungerId = null;
+        }
+        hungerId = setTimeout(() => {
+            hungerCycle();
+        }, currentTimeout - dtHunger);
+        
+        let dtHappy = Date.now() - i.happyTick;
+        currentTimeout = i.state == "baby" ? happyTimeoutBaby : happyTimeout;
+        if (dtHappy > currentTimeout) {
+            let ticks = Math.floor(dtHappy / currentTimeout);
+            let newHappy = i.happy - ticks;
+            browser.storage.local.set({happy: newHappy > 0 ? newHappy : 0});
+            browser.storage.local.set({happyTick: i.happyTick + ticks * currentTimeout});
+        }
+        if (happyId) {
+            clearTimeout(happyId);
+            happyId = null;
+        }
+        happyId = setTimeout(() => {
+            happyCycle();
+        }, currentTimeout - dtHappy);
+
+        console.log(i);
+        info.innerText = "";
+        aaa.innerText = `hungry ${i.hunger} `;
+        bbb.innerText = `happy ${i.happy}`;
+    });
+
+    drawStart();
 }
 
 function hatch() {
@@ -227,11 +288,15 @@ function hatch() {
 
     setTimeout(() => {
         growth();
-    }, /*24 * 60 * 60 * 1000*/10000);
+    }, /*24 * 60 * 60 * 1000*/growthTime);
 
     tamagotchi.classList.add("baby");
 
-    load();
+    info.innerText = "";
+    aaa.innerText = "hunger 0 ";
+    bbb.innerText = "happy 0";
+
+    drawStart();
 }
 
 function init() {
@@ -245,8 +310,8 @@ function init() {
             hatchButton.style.display = "none";
             hatchText.style.display = "";
 
-            hungerCycle();
-            happyCycle();
+            // hungerCycle();
+            // happyCycle();
         } else {
             img.src = "../kaguya32.png"; // change to bamboo
         }
@@ -292,7 +357,7 @@ foodButton.addEventListener("click", e => {
     hunger.then(i => {
         if (i.hunger < 4) {
             browser.storage.local.set({hunger: i.hunger + 1});
-            tamagotchi.classList.remove("hungry");
+            // tamagotchi.classList.remove("hungry");
             console.log(`hunger ${i.hunger + 1}`);
             aaa.innerText = `hunger ${i.hunger + 1} `;
         }
@@ -304,7 +369,7 @@ giveButton.addEventListener("click", e => {
     happy.then(i => {
         if (i.happy < 4) {
             browser.storage.local.set({happy: i.happy + 1});
-            tamagotchi.classList.remove("sad");
+            // tamagotchi.classList.remove("sad");
             console.log(`happy ${i.happy + 1}`);
             bbb.innerText = `happy ${i.happy + 1}`;
         }
@@ -324,13 +389,17 @@ settingButton.addEventListener("click", e => {
     showOverlay("s");
 });
 
+clearButton.addEventListener("click", e => {
+    clear();
+    window.location.reload();
+});
+
 closeOverlay.addEventListener("click", hideOverlay);
 
 hatchButton.addEventListener("click", e => {
-    let test = 100;
-    setTimeout(hatch, test);
+    setTimeout(hatch, hatchTime);
     
-    let hatchDate = Date.now() + test;
+    let hatchDate = Date.now() + hatchTime;
     let updateTime = () => {
         let time = Date.now();
         let timeLeft = hatchDate - time;
