@@ -10,7 +10,7 @@
     <body>
         <div id="container">
             <div id="info">
-                <p id="name">kaguya</p><p id="hunger"></p><p id="happy"></p>
+                <p id="name">tamagotchi</p><p id="hunger"></p><p id="happy"></p>
             </div>
             <div id="tamagotchi">
                 <button type="button" id="tama-b">
@@ -20,29 +20,63 @@
             </div>
             <div id="controls">
                 <div id="start">
-                    <button type="button" id="hatch">hatch</button>
-                    <span id="hatch-time" style="display: none;">put time here</p>
+                    <button type="button" id="hatch">click here to hatch!</button>
+                    <span id="hatch-time" style="display: none;"><!-- put time here --></p>
                 </div>
-                <div id="main" style = "display: none;">
+                <div id="main" style="display: none;">
                     <button type="button" id="act">a</button>
                     <button type="button" id="play">b</button>
                     <button type="button" id="set">c</button>
                     <!-- <button type="button" id="check">c</button> -->
                 </div>
-                <div id="action" style="display: none;">
+                <!-- <div id="action" style="display: none;">
                     <button type="button" id="feed">f</button>
                     <button type="button" id="give">g</button>
-                    <button type="button" id="a-return">r</button>
-                </div>
-                <div id="game" style="display: none;">
+                    <button type="button" id="close-action">r</button>
+                </div> -->
+                <!-- <div id="game" style="display: none;">
                     
                 </div>
                 <div id="settings" style="display: none;">
 
+                </div> -->
+            </div>
+            <div id="control-cover" style="display: none;"></div>
+        </div>
+        <div id="overlay" style="display: none;">
+            <div id="overlay-space"></div>
+            <div id="overlay-controls">
+                <div id="action" style="display: none;">
+                    <button type="button" id="feed">
+                        <div class="funny-button">
+                            <p>food</p>
+                        </div>
+                    </button>
+                    <button type="button" id="give">
+                        <div class="funny-button">
+                            <p>give</p>
+                        </div>
+                    </button>
+                </div>
+                <div id="games" style="display: none;">
+                    <button type="button">
+                        <div class="funny-button">
+                            <p></p>
+                        </div>
+                    </button>
+                </div>
+                <div id="settings" style="display: none;">
+                    <button type="button">
+                        <div class="funny-button">
+                            <p></p>
+                        </div>
+                    </button>
                 </div>
             </div>
+            <div id="close-container">
+                <button type="button" id="close-overlay">close</button>
+            </div>
         </div>
-        <div id="overlay"></div>
         <script src="tamagotchi.js"></script>
     </body>
 </html>

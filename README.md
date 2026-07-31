@@ -21,3 +21,8 @@ put link here
 
 # notes
  - this extension stores data locally that will persist when browsing data is cleared
+
+# todo?
+ - get better icons
+ - determine icon size for extension logo and popup button
+ - use icons for buttons in app

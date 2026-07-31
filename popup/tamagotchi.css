@@ -1,3 +1,5 @@
+/* maybe the bordeless buttons are a bad idea */
+
 /* :root {
     --bg: rgb(14, 21, 40);
 } */
@@ -11,6 +13,7 @@ body {
     margin: 0;
     height: 250px;
     width: 250px;
+
     background-color: rgb(14, 21, 40);
     /* color: white; */
     font-family: sans-serif;
@@ -21,13 +24,14 @@ body {
     border-radius: none;
 } */
 
-/* p {
-    color: white;
-} */
+p {
+    display: inline;
+}
 
 button {
-    /* border: none; */
+    border: none;
     background-color: transparent;
+    padding: 0;
     /* color: white; */
 }
 
@@ -41,6 +45,7 @@ button:active {
 
 #info {
     text-align: center;
+    line-height: 30px;
 }
 
 /*#name*/ p {
@@ -50,7 +55,8 @@ button:active {
 #container {
     display: flex;
     flex-direction: column;
-    height: calc(100% - 20px);
+    height: 230px;
+    width: 230px;
     padding: 10px;
     gap: 10px;
     /* align-content: space-between; */
@@ -65,7 +71,7 @@ button:active {
 #tamagotchi > button {
     height: 100%;
     width: 100%;
-    border: none;
+    /* border: none; */
 }
 
 .baby {
@@ -98,12 +104,12 @@ button:active {
     /* position: absolute; */
 }
 
-#controls > div > button {
+#controls > div > button, /*#overlay-controls > div > button,*/ #close-overlay {
     /* flex-grow: 1; */
     height: 30px;
     /* width: 30px; */
-    border: 1px solid white;
-    border-radius: 5px;
+    /* border: 1px solid white;
+    border-radius: 5px; */
     /* font-size: 1em; */
 }
 
@@ -115,9 +121,15 @@ button:active {
     display: none !important;
 } */
 
-#start > button {
-    padding: 0 7px 0 7px;
+#start, #start > *, #close-overlay {
+    width: 100%;
+    text-align: center;
+    /* padding: 0 7px 0 7px; */
 }
+
+/* #start > button, #close-overlay {
+    padding: 0 7px 0 7px; 
+} */
 
 #hatch-time {
     height: 30px;
@@ -128,3 +140,57 @@ button:active {
 #main > button, #action > button {
     width: 30px;
 }
+
+#control-cover, #overlay-space {
+    height: 30px;
+}
+
+#overlay {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+
+    position: absolute;
+    height: 230px;
+    width: 230px;
+    top: 0;
+    left: 0;
+
+    /* pointer-events: none; */
+    background-color: rgba(14, 21, 40, 0.75);
+}
+
+#overlay-controls {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#overlay-controls > div, #close-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+#overlay-controls > div > button {
+    height: 60px;
+    width: 60px;
+    /* border: none; */
+}
+
+.funny-button {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* #close-overlay {
+    height: 30px;
+    border: 1px solid white;
+    border-radius: 5px;
+} */
+

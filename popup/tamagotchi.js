@@ -2,14 +2,14 @@ let tamagotchi = document.getElementById("tamagotchi");
 
 let canvas = document.getElementById("tama");
 let ctx = canvas.getContext("2d");
-// ctx.imageSmoothingEnabled = false;
+ctx.imageSmoothingEnabled = false;
 const img = new Image();
 
 let x = 48, y = 48;
 
 let button = document.getElementById("tama-b");
 
-let hatchBtn = document.getElementById("hatch");
+let hatchButton = document.getElementById("hatch");
 
 let start = document.getElementById("start");
 let main = document.getElementById("main");
@@ -19,48 +19,44 @@ let hatchText = document.getElementById("hatch-time");
 
 let actButton = document.getElementById("act");
 let playButton = document.getElementById("play")
-let setButton = document.getElementById("set");
-let actMenu = document.getElementById("action");
+let settingButton = document.getElementById("set");
+// let actMenu = document.getElementById("action");
 
+let menuControls = document.getElementById("controls");
+let menuCover = document.getElementById("control-cover");
+
+let overlay = document.getElementById("overlay");
+let closeOverlay = document.getElementById("close-overlay");
+
+let actions = document.getElementById("action");
 let foodButton = document.getElementById("feed");
 let giveButton = document.getElementById("give");
-let actionReturn = document.getElementById("a-return");
+// let closeAction = document.getElementById("close-action");
 
+let games = document.getElementById("games");
+
+let settings = document.getElementById("settings");
+let something = "a";
+
+// testing
 let aaa = document.getElementById("hunger");
 let bbb = document.getElementById("happy");
 
-function hatch() {
-    let hatched = Date.now();
-    browser.storage.local.set({hatchDate: hatched, hunger: 0, happy: 0, hungerTick: hatched, happyTick: hatched, state: "baby"});
-    let test = browser.storage.local.get();
-    test.then(i => {
-        console.log(i);
-    });
-    setTimeout(hungerCycle, 1000);
-    setTimeout(happyCycle, 1000);
-    // info.innerText = browser.storage.local.get("hatchDate", i => {return i.toString();});
+let hungerId, happyId;
 
-    setTimeout(() => {
-        browser.storage.local.set({state: "adult"})
-        tamagotchi.classList.remove("baby");
-    }, /*24 * 60 * 60 * 1000*/10000);
+function clear() { // which one do i use...
+    let clearing = browser.storage.local.clear();
+    clearing.then(() => console.log("ok"), e => console.log(error));
+    let clearing2 = browser.storage.sync.clear();
+    clearing2.then(() => console.log("ok"), e => console.log(error));
 
-    tamagotchi.classList.add("baby");
-    info.innerText = "";
-    aaa.innerText = "hunger 0";
-    bbb.innerText = "happy 0";
-
-    ctx.clearRect(0, 0, canvas.height, canvas.width);
-    x = 0, y = 0;
-    img.src = "../kaguya128.png";
-    // ctx.drawImage(img, 0, 0);
-
-    start.style.display = "none";
-    // hatchText.style.display = "none";
-    main.style.display = "";
+    clearTimeout(hungerId);
+    clearTimeout(happyId);
+    hungerId = null;
+    happyId = null;
 }
 
-// consider combining hunger and happiness
+// consider combining hunger and happiness into one loop
 function hungerCycle() {
     let data = browser.storage.local.get(["hunger", "hungerTick", "state"]);
     
@@ -68,13 +64,18 @@ function hungerCycle() {
     let timeout = 2000;
 
     data.then(i => {
+        // if (!i.hungerTick) {
+        //     return;
+        // }
         if (i.state == "baby") {
             timeout = 1000;
         }
         let expectedTick = i.hungerTick + timeout;
         let deltaTime = now - expectedTick;
         if (deltaTime < timeout) {
-            // um
+            // setTimeout(() => {
+            //     foodLoop = hungerCycle();
+            // }, deltaTime);
         }
         console.log(`hunger dt ${deltaTime}`);
 
@@ -92,8 +93,14 @@ function hungerCycle() {
         console.log(`hunger tick ${expectedTick}`);
         browser.storage.local.set({hungerTick: expectedTick});
 
-        setTimeout(() => {
+        if (hungerId) {
+            clearTimeout(hungerId);
+            hungerId = null;
+        }
+
+        hungerId = setTimeout(() => {
             hungerCycle();
+            // console.log(hungerId);
         }, timeout - deltaTime);
     });
 }
@@ -105,6 +112,9 @@ function happyCycle() {
     let timeout = 2000;
 
     data.then(i => {
+        // if (!i.happyTick) {
+        //     return;
+        // }
         if (i.state == "baby") {
             timeout = 1000;
         }
@@ -119,7 +129,7 @@ function happyCycle() {
         if (i.happy > 0) {
             browser.storage.local.set({happy: i.happy - 1});
             // tamagotchi.classList.remove("sad");
-            console.log(`happy ${i.happy - 1}`);
+            // console.log(`happy ${i.happy - 1}`);
             bbb.innerText = `happy ${i.happy - 1}`;
         }
         
@@ -130,38 +140,151 @@ function happyCycle() {
         console.log(`happy tick ${expectedTick}`);
         browser.storage.local.set({happyTick: expectedTick});
 
-        setTimeout(() => {
+        if (happyId) {
+            clearTimeout(happyId);
+            happyId = null;
+        }
+
+        happyId = setTimeout(() => {
             happyCycle();
         }, timeout - deltaTime);
     });
 }
 
-function clear() { // which one do i use bro
-    let clearing = browser.storage.local.clear();
-    clearing.then(() => console.log("ok"), e => console.log(error));
-    let clearing2 = browser.storage.sync.clear();
-    clearing2.then(() => console.log("ok"), e => console.log(error));
+function growth() {
+    browser.storage.local.set({state: "adult"});
+    tamagotchi.classList.remove("baby");
+}
+
+// function saveData() {
+//     let test = browser.storage.local.get();
+//     test.then(i => {
+//         console.log(i);
+//         console.log(window.btoa(JSON.stringify(i)));
+//     });
+// }
+
+// eyJoYXBweSI6MywiaGFwcHlUaWNrIjoxNzg1NTE5NDU3NzEyLCJoYXRjaERhdGUiOjE3ODU1MTk0MTY3MTIsImh1bmdlciI6MywiaHVuZ2VyVGljayI6MTc4NTUxOTQ1NzcxMiwic3RhdGUiOiJhZHVsdCJ9
+// function loadData(data) {
+//     let test = window.atob(data);
+//     console.log(test);
+//     clearTimeout(foodLoop);
+//     clearTimeout(funLoop);
+//     clear();
+//     browser.storage.local.set(JSON.parse(test));
+
+//     let timeout = 2000;
+//     if (test.state = "baby") {
+//         timeout = 1000;
+//     }
+    
+//     foodLoop = setTimeout(hungerCycle, timeout);
+//     funLoop = setTimeout(happyCycle, timeout);
+// }
+
+function load() {
+    let test = browser.storage.local.get();
+    test.then(i => {
+        if (Date.now() - i.hatchDate > 10000) {
+            growth();
+        } else {
+            tamagotchi.classList.add("baby");
+        }
+        
+        console.log(i);
+    });
+    
+    info.innerText = "";
+    aaa.innerText = "hunger 0 ";
+    bbb.innerText = "happy 0";
+
+    ctx.clearRect(0, 0, canvas.height, canvas.width);
+    x = 0, y = 0;
+    img.src = "../kaguya128.png";
+    // ctx.drawImage(img, 0, 0);
+
+    start.style.display = "none";
+    // hatchText.style.display = "none";
+    main.style.display = "";
+}
+
+function hatch() {
+    let hatched = Date.now();
+    clear();
+    browser.storage.local.set({
+        hatchDate: hatched,
+        hunger: 0,
+        happy: 0,
+        hungerTick: hatched,
+        happyTick: hatched,
+        state: "baby"
+    });
+    hungerCycle();
+    happyCycle();
+    // clearTimeout(foodLoop);
+    // clearTimeout(funLoop);
+    // info.innerText = browser.storage.local.get("hatchDate", i => {return i.toString();});
+
+    setTimeout(() => {
+        growth();
+    }, /*24 * 60 * 60 * 1000*/10000);
+
+    tamagotchi.classList.add("baby");
+
+    load();
 }
 
 function init() {
-    let data = browser.storage.local.get();
+    img.onload = () => ctx.drawImage(img, x, y);
+
+    let data = browser.storage.local.getBytesInUse();
     data.then(i => {
-        if (true) {
-            img.onload = () => ctx.drawImage(img, x, y);
-            img.src = "../kaguya32.png"; // change to bamboo
-        } else {
+        if (typeof i !== "undefined" && i > 0) {
+            load();
             console.log(i);
-            // idk
+            hatchButton.style.display = "none";
+            hatchText.style.display = "";
+
+            hungerCycle();
+            happyCycle();
+        } else {
+            img.src = "../kaguya32.png"; // change to bamboo
         }
     }, e => {
         // idk what to do here
         console.log(e);
-    })
+    });
+}
+
+function showOverlay(menu) {
+    menuControls.style.display = "none";
+    menuCover.style.display = "";
+    overlay.style.display = "";
+    
+    if (menu == "a") {
+        actions.style.display = "";
+    } else if (menu == "p") {
+        games.style.display = "";
+    } else if (menu == "s") {
+        settings.style.display = "";
+    } else {
+        console.log("idk");
+    }
+}
+
+function hideOverlay() {
+    actions.style.display = "none";
+    games.style.display = "none";
+    settings.style.display = "none";
+    overlay.style.display = "none";
+    menuCover.style.display = "none";
+    menuControls.style.display = "";
 }
 
 actButton.addEventListener("click", e => {
-    main.style.display = "none";
-    actMenu.style.display = "";
+    // main.style.display = "none";
+    // actMenu.style.display = "";
+    showOverlay("a");
 });
 
 foodButton.addEventListener("click", e => {
@@ -188,13 +311,23 @@ giveButton.addEventListener("click", e => {
     });
 });
 
-actionReturn.addEventListener("click", e => {
-    actMenu.style.display = "none";
-    main.style.display = "";
+// closeAction.addEventListener("click", e => {
+//     actMenu.style.display = "none";
+//     main.style.display = "";
+// });
+
+playButton.addEventListener("click", e => {
+    showOverlay("p");
 });
 
-hatchBtn.addEventListener("click", e => {
-    let test = 1000;
+settingButton.addEventListener("click", e => {
+    showOverlay("s");
+});
+
+closeOverlay.addEventListener("click", hideOverlay);
+
+hatchButton.addEventListener("click", e => {
+    let test = 100;
     setTimeout(hatch, test);
     
     let hatchDate = Date.now() + test;
@@ -214,7 +347,7 @@ hatchBtn.addEventListener("click", e => {
     let hatchInterval = setInterval(updateTime, 1000);
     updateTime();
 
-    hatchBtn.style.display = "none";
+    hatchButton.style.display = "none";
     hatchText.style.display = "";
 });
 
