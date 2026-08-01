@@ -32,12 +32,12 @@ The settings icon lets you pause the game or clear saved data. Interacting with 
  - Organize code
 
 # How this was made
-This plugin was made with HTML, CSS, and JavaScript. Icons used are from Material UI icons by Google. AI has not been used in this project.
+AI has not been used in this project. This plugin was made with HTML, CSS, and JavaScript. Icons used are from Material UI icons by Google.
 
 # web playable (demo)
-Only available for firefox currently
+Only available for Firefox currently. Please install Firefox to use the extension, sorry.
 
-put link here
+Get extension from Firefox add-on store at https://addons.mozilla.org/en-CA/firefox/addon/tamagotchi-pet/. I'm really sorry if the link isn't up yet since I'm finishing this last minute, it should be up by the end of August 1.
 
 # notes
  - this extension stores data locally that will persist when browsing data is cleared. to remove data, uninstall the extension or press the clear button in the settings.
