@@ -3,7 +3,7 @@ let tamagotchi = document.getElementById("tamagotchi");
 let canvas = document.getElementById("tama");
 let ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = false;
-ctx.font = "30px sans-serif";
+ctx.font = "20px sans-serif";
 ctx.fillStyle = "white";
 // ctx.textAlign = "center";
 
@@ -49,12 +49,14 @@ let happyInfo = document.getElementById("happy");
 let hungerId, happyId;
 
 const hatchTime = 3000;
-const growthTime = 10000;
+const growthTime = 20000;
 const maxStat = 4;
-const hungerTimeout = 5000;
-const hungerTimeoutBaby = 3000;
-const happyTimeout = 5000;
+const hungerTimeout = 8000;
+const hungerTimeoutBaby = 4000;
+const happyTimeout = 6000;
 const happyTimeoutBaby = 3000;
+// const daytime = 5000;
+// const nighttime = 3000;
 const checkTime = 1000;
 
 function clear() { // which one do i use...
@@ -67,6 +69,14 @@ function clear() { // which one do i use...
     clearTimeout(happyId);
     hungerId = null;
     happyId = null;
+}
+
+function changeIcon(type) {
+    let sending = browser.runtime.sendMessage({
+        message: type
+    });
+
+    sending.then(r => console.log(r), e => console.log(e));
 }
 
 // consider combining hunger and happiness into one loop
@@ -89,20 +99,23 @@ function hungerCycle(pause = 0) {
             // load();
             // return;
         }
-        console.log(`hunger dt ${deltaTime}`);
+        // console.log(`hunger dt ${deltaTime}`);
 
         if (i.hunger > 0) {
             browser.storage.local.set({hunger: i.hunger - 1});
             // tamagotchi.classList.remove("hungry");
-            console.log(`hunger ${i.hunger - 1}`);
-            hungerInfo.innerText = `hunger ${i.hunger - 1} `;
+            // console.log(`hunger ${i.hunger - 1}`);
+            // hungerInfo.innerText = `hunger ${i.hunger - 1} `;
         }
         
         if (i.hunger - 1 < 1) {
+            // browser.browserAction.setIcon(alertIcon);
+            changeIcon("alert");
+            tamagotchi.classList.add("alert");
             // tamagotchi.classList.add("hungry");
         }
         
-        console.log(`hunger tick ${expectedTick}`);
+        // console.log(`hunger tick ${expectedTick}`);
         browser.storage.local.set({hungerTick: expectedTick});
 
         if (hungerId) {
@@ -138,20 +151,23 @@ function happyCycle(pause = 0) {
             // return;
             // um
         }
-        console.log(`happy dt ${deltaTime}`);
+        // console.log(`happy dt ${deltaTime}`);
 
         if (i.happy > 0) {
             browser.storage.local.set({happy: i.happy - 1});
             // tamagotchi.classList.remove("sad");
             // console.log(`happy ${i.happy - 1}`);
-            happyInfo.innerText = `happy ${i.happy - 1}`;
+            // happyInfo.innerText = `happy ${i.happy - 1}`;
         }
         
         if (i.happy - 1 < 1) {
+            // browser.browserAction.setIcon(alertIcon);
+            changeIcon("alert");
+            tamagotchi.classList.add("alert");
             // tamagotchi.classList.add("sad");
         }
 
-        console.log(`happy tick ${expectedTick}`);
+        // console.log(`happy tick ${expectedTick}`);
         browser.storage.local.set({happyTick: expectedTick});
 
         if (happyId) {
@@ -207,41 +223,36 @@ function unpause() {
 }
 
 function sleepCycle() {
-    
+    browser.storage.local.set({asleep: true});
+
 }
 
 function growth() {
     // character evolution code
+    
+    img.src = "../kaguya128.png";
 
     browser.storage.local.set({state: "adult"});
     tamagotchi.classList.remove("baby");
 }
 
-// function saveData() {
-//     let test = browser.storage.local.get();
-//     test.then(i => {
-//         console.log(i);
-//         console.log(window.btoa(JSON.stringify(i)));
-//     });
-// }
+function saveData() {
+    let test = browser.storage.local.get();
+    test.then(i => {
+        console.log(i);
+        console.log(window.btoa(JSON.stringify(i)));
+    });
+}
 
 // eyJoYXBweSI6MywiaGFwcHlUaWNrIjoxNzg1NTE5NDU3NzEyLCJoYXRjaERhdGUiOjE3ODU1MTk0MTY3MTIsImh1bmdlciI6MywiaHVuZ2VyVGljayI6MTc4NTUxOTQ1NzcxMiwic3RhdGUiOiJhZHVsdCJ9
-// function loadData(data) {
-//     let test = window.atob(data);
-//     console.log(test);
-//     clearTimeout(foodLoop);
-//     clearTimeout(funLoop);
-//     clear();
-//     browser.storage.local.set(JSON.parse(test));
-
-//     let timeout = 2000;
-//     if (test.state = "baby") {
-//         timeout = 1000;
-//     }
+function loadData(data) {
+    clear();
+    let test = window.atob(data);
+    // console.log(test);
+    browser.storage.local.set(JSON.parse(test));
     
-//     foodLoop = setTimeout(hungerCycle, timeout);
-//     funLoop = setTimeout(happyCycle, timeout);
-// }
+    load();
+}
 
 function check() {
     let asdf = browser.storage.local.get();
@@ -250,7 +261,7 @@ function check() {
         // liholy molyghts code
         if (i.happy == 0 && i.hunger > 0) {
             tamagotchi.classList.add("sad");
-            ctx.fillText("Sad", 64 - ctx.measureText("Sad").width/2, 25);
+            ctx.fillText("Sad", 64 - ctx.measureText("Sad").width/2, 15);
             setTimeout(() => {
                 tamagotchi.classList.remove("sad");
                 ctx.clearRect(0, 0, canvas.height, canvas.width);
@@ -259,7 +270,7 @@ function check() {
         }
         if (i.hunger == 0) {
             tamagotchi.classList.add("hungry");
-            ctx.fillText("Hungry", 64 - ctx.measureText("Hungry").width/2, 25);
+            ctx.fillText("Hungry", 64 - ctx.measureText("Hungry").width/2, 15);
             setTimeout(() => {
                 tamagotchi.classList.remove("hungry");
                 ctx.clearRect(0, 0, canvas.height, canvas.width);
@@ -268,16 +279,21 @@ function check() {
         }
         if (i.happy > 0 && i.hunger > 0) {
             ctx.clearRect(0, 0, canvas.height, canvas.width);
-            img.src = "../kaguyaCheck.png";
+            img.src = i.state == "baby" ? "../kaguyaBabyCheck.png" : "../kaguyaCheck.png";
             ctx.drawImage(img, x, y);
+            setTimeout(() => {
+                ctx.clearRect(0, 0, canvas.height, canvas.width);
+                img.src = i.state == "baby" ? "../kaguyaBaby.png" : "../kaguya128.png";
+                ctx.drawImage(img, x, y);
+            }, checkTime);
         }
     });
 }
 
-function drawStart() {
+function drawStart(image = "../kaguya128.png") {
     ctx.clearRect(0, 0, canvas.height, canvas.width);
     x = 0, y = 0;
-    img.src = "../kaguya128.png";
+    img.src = image;
     // ctx.drawImage(img, 0, 0);
 
     start.style.display = "none";
@@ -289,6 +305,7 @@ let pauseText = document.getElementById("pause-text");
 let playText = document.getElementById("play-text");
 
 function load(pause = 0) {
+    let isBaby = false;
     let test = browser.storage.local.get();
     test.then(i => {
         console.log(i);
@@ -305,6 +322,7 @@ function load(pause = 0) {
                         growth();
                     }, growthTime - dtGrowth);
                     tamagotchi.classList.add("baby");
+                    isBaby = true;
                 }
             }
 
@@ -370,10 +388,18 @@ function load(pause = 0) {
         //     pauseButton.disabled = true;
         // }
 
-        info.innerText = "";
-        hungerInfo.innerText = `hunger ${newHunger} `;
-        happyInfo.innerText = `happy ${newHappy}`;
+        info.innerText = "kaguya";
+        // hungerInfo.innerText = `hunger ${newHunger} `;
+        // happyInfo.innerText = `happy ${newHappy}`;
+
+        if (i.hunger == 0 || i.happy == 0) {
+            // browser.browserAction.setIcon(alertIcon);
+            changeIcon("alert");
+            tamagotchi.classList.add("alert");
+        }
     });
+
+    return isBaby;
 }
 
 function hatch() {
@@ -397,13 +423,18 @@ function hatch() {
         growth();
     }, /*24 * 60 * 60 * 1000*/growthTime);
 
-    tamagotchi.classList.add("baby");
+    
+    tamaButton.classList.remove("nohover");
 
-    info.innerText = "";
-    hungerInfo.innerText = "hunger 0 ";
-    happyInfo.innerText = "happy 0";
+    // browser.browserAction.setIcon(alertIcon);
+    changeIcon("alert");
+    tamagotchi.classList.add("baby", "alert");
 
-    drawStart();
+    info.innerText = "kaguya";
+    // hungerInfo.innerText = "hunger 0 ";
+    // happyInfo.innerText = "happy 0";
+
+    drawStart("../kaguyaBaby.png");
 }
 
 function init() {
@@ -412,7 +443,9 @@ function init() {
     let data = browser.storage.local.getBytesInUse();
     data.then(i => {
         if (typeof i !== "undefined" && i > 0) {
-            load();
+            let isBaby = load();
+            tamaButton.classList.remove("nohover");
+
             // console.log(i);
             hatchButton.style.display = "none";
             hatchText.style.display = "";
@@ -420,7 +453,7 @@ function init() {
             // hungerCycle();
             // happyCycle();
 
-            drawStart();
+            isBaby ? drawStart("../kaguyaBaby.png") : drawStart();
         } else {
             img.src = "../kaguya32.png"; // change to bamboo
         }
@@ -466,25 +499,39 @@ actButton.addEventListener("click", e => {
 });
 
 foodButton.addEventListener("click", e => {
-    let hunger = browser.storage.local.get("hunger");
+    let hunger = browser.storage.local.get(["hunger", "happy"]);
     hunger.then(i => {
         if (i.hunger < maxStat) {
             browser.storage.local.set({hunger: i.hunger + 1});
+            console.log(`${i.hunger + 1} ${i.happy}`);
+            if (i.happy > 0) {
+                // console.log("a");
+                // browser.browserAction.setIcon(normalIcon);
+                changeIcon("normal");
+                tamagotchi.classList.remove("alert");
+            }
             // tamagotchi.classList.remove("hungry");
-            console.log(`hunger ${i.hunger + 1}`);
-            hungerInfo.innerText = `hunger ${i.hunger + 1} `;
+            // console.log(`hunger ${i.hunger + 1}`);
+            // hungerInfo.innerText = `hunger ${i.hunger + 1} `;
         }
     });
 });
 
 giveButton.addEventListener("click", e => {
-    let happy = browser.storage.local.get("happy");
+    let happy = browser.storage.local.get(["hunger", "happy"]);
     happy.then(i => {
         if (i.happy < maxStat) {
             browser.storage.local.set({happy: i.happy + 1});
+            console.log(`${i.hunger} ${i.happy + 1}`);
+            if (i.hunger > 0) {
+                // console.log("b");
+                // browser.browserAction.setIcon(normalIcon);
+                changeIcon("normal");
+                tamagotchi.classList.remove("alert");
+            }
             // tamagotchi.classList.remove("sad");
-            console.log(`happy ${i.happy + 1}`);
-            happyInfo.innerText = `happy ${i.happy + 1}`;
+            // console.log(`happy ${i.happy + 1}`);
+            // happyInfo.innerText = `happy ${i.happy + 1}`;
         }
     });
 });

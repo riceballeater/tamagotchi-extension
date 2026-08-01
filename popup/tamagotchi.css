@@ -48,6 +48,10 @@ button:active {
     color: #777777 !important;
 }
 
+.nohover {
+    pointer-events: none;
+}
+
 #info {
     text-align: center;
     line-height: 30px;
@@ -81,6 +85,10 @@ button:active {
 
 .baby {
     background-color: #88888888;
+}
+
+.baby.alert, .alert {
+    background-color: #ff0000;
 }
 
 .baby.sad, .sad {

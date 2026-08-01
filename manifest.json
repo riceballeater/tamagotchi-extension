@@ -31,5 +31,9 @@
             "resources": [],
             "matches": ["*://*/*"]
         }
-    ]
+    ],
+
+    "background": {
+        "scripts": ["background.js"]
+    }
 }
