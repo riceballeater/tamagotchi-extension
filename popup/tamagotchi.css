@@ -43,6 +43,11 @@ button:active {
     background-color: transparent;
 }
 
+*:hover[disabled], *[disabled], *[disabled] > * > *, *[disabled] > * > svg > path, *[disabled] > * > svg > g > path {
+    background-color: rgb(7, 7, 20);
+    color: #777777 !important;
+}
+
 #info {
     text-align: center;
     line-height: 30px;

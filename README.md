@@ -12,7 +12,7 @@ project for hack club #horizons
 a
 
 # How this was made
-html css javascript
+This plugin was made with HTML, CSS, and JavaScript. Material UI icons from Google were used and AI was not used
 
 # web playable (demo)
 only available for firefox currently
