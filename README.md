@@ -8,6 +8,8 @@ I wanted to make something on the simple side for my first project, so I got the
 
 # How to play
 ## basic gameplay
+Open the extension by clicking on its icon in the browser toolbar or extensions list.
+
 Begin caring for the tamagotchi by pressing the hatch button and waiting (3s) for the pet to be born. Once born, the tamagotchi will start with empty food and happiness meters, which both have a maximum of 4 points. While fully hungry or fully sad, the color of the background will be bright red to show that the pet wants something. As well, the extension icon will have a red background. You can check the pet's needs by clicking on it. The pet begins in a baby state, shown by a grey background, during which it consumes food and happiness faster (4s and 3s respectively). It will grow up after a while (20s, consuming meter points every 8s and 6s). Clicking on the pet when the food and happiness are not empty will make the pet perform a close up.
 
 All durations are sped up for testing and demonstration purposes. Closing and reopening the extension will not reset progress. Please keep the popup open while hatching (for now)! Also, there are currently no downsides to a hungry or sad pet.
@@ -38,6 +40,8 @@ AI has not been used in this project. This plugin was made with HTML, CSS, and J
 Only available for Firefox currently. Please install Firefox to use the extension, sorry.
 
 Get extension from Firefox add-on store at https://addons.mozilla.org/en-CA/firefox/addon/tamagotchi-pet/. I'm really sorry if the link isn't up yet since I'm finishing this last minute, it should be up by the end of August 1.
+
+If the extension is not available, download the repository as a .zip file or download the zip from releases, unzip the folder, navigate to `about:debugging` in Firefox, click on 'This Firefox', and finally click "Load Temporary Add-on..." and select manifest.json. The extension will then be available like normal.
 
 # notes
  - this extension stores data locally that will persist when browsing data is cleared. to remove data, uninstall the extension or press the clear button in the settings.
