@@ -39,9 +39,9 @@ AI has not been used in this project. This plugin was made with HTML, CSS, and J
 # web playable (demo)
 Only available for Firefox currently. Please install Firefox to use the extension, sorry.
 
-Get extension from Firefox add-on store at https://addons.mozilla.org/en-CA/firefox/addon/tamagotchi-pet/. I'm really sorry if the link isn't up yet since I'm finishing this last minute, it should be up by the end of August 1.
+Get extension from https://riceballeater.github.io/tamagotchi-extension/. Click the link on the page to install.
 
-If the extension is not available, download the repository as a .zip file or download the zip from releases, unzip the folder, navigate to `about:debugging` in Firefox, click on 'This Firefox', and finally click "Load Temporary Add-on..." and select manifest.json from the extension folder. The extension will then be available like normal.
+~~Get extension from Firefox add-on store at https:\//addons.mozilla.org/en-CA/firefox/addon/tamagotchi-pet/.~~
 
 # notes
  - this extension stores data locally that will persist when browsing data is cleared. to remove data, uninstall the extension or press the clear button in the settings.
