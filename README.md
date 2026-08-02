@@ -41,7 +41,7 @@ Only available for Firefox currently. Please install Firefox to use the extensio
 
 Get extension from Firefox add-on store at https://addons.mozilla.org/en-CA/firefox/addon/tamagotchi-pet/. I'm really sorry if the link isn't up yet since I'm finishing this last minute, it should be up by the end of August 1.
 
-If the extension is not available, download the repository as a .zip file or download the zip from releases, unzip the folder, navigate to `about:debugging` in Firefox, click on 'This Firefox', and finally click "Load Temporary Add-on..." and select manifest.json. The extension will then be available like normal.
+If the extension is not available, download the repository as a .zip file or download the zip from releases, unzip the folder, navigate to `about:debugging` in Firefox, click on 'This Firefox', and finally click "Load Temporary Add-on..." and select manifest.json from the extension folder. The extension will then be available like normal.
 
 # notes
  - this extension stores data locally that will persist when browsing data is cleared. to remove data, uninstall the extension or press the clear button in the settings.
